@@ -1,5 +1,6 @@
 import styled from "@emotion/styled/macro";
 import React from "react";
+import useAbilities from "../hooks/useAblitiles";
 import { Ability, Color } from "../types";
 import { mapColorToHex } from "../utils";
 
@@ -48,15 +49,22 @@ interface Props {
   color?: Color;
 }
 
-const Abilities: React.FC<Props> = ({ color }) => {
+const Abilities: React.FC<Props> = ({ color, abilities }) => {
+  const results = useAbilities(abilities);
+
   return (
     <Base>
       <Title color={mapColorToHex(color?.name)}>능력</Title>
       <List>
-        <ListItem>
-          <Label></Label>
-          <Description></Description>
-        </ListItem>
+        {results.map(
+          ({ data }, idx) =>
+            data && (
+              <ListItem>
+                <Label>{data.data.name}</Label>
+                <Description>{data.data.effect_entries[0].effect}</Description>
+              </ListItem>
+            )
+        )}
       </List>
     </Base>
   );
